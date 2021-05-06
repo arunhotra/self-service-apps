@@ -1,0 +1,11 @@
+---
+- name: Setup provider for BIG-IP
+  set_fact:
+    provider:
+      server: "{{inventory_hostname}}"
+      user: "{{bigip_username}}"
+      password: "{{bigip_password}}"
+      server_port: "{{bigip_port}}"
+      validate_certs: "{{validate_certs}}"
+  tags:
+    - testAppsCurrent

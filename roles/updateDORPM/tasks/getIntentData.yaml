@@ -1,0 +1,22 @@
+---
+- name: Create temporary directories for storing variables
+  file:
+    path: "{{ role_path }}/tmp"
+    state: directory
+  tags:
+    - updateDORPM
+
+- name: Download environment details from intent data
+  get_url:
+    url: "https://raw.githubusercontent.com/arunhotra/infra-repo/master/virtualDataCenter/envDefaultBuildvalues.json"
+    dest: "{{ role_path }}/tmp/common_deviceVars.json"
+  tags:
+    - updateDORPM
+
+- name: Creating device variables from sourcedepot
+  include_vars:
+    name: "device_vars"
+    dir: "{{ role_path }}/tmp/"
+    files_matching: _deviceVars.json
+  tags:
+    - updateDORPM

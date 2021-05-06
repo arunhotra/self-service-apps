@@ -1,0 +1,20 @@
+  - name: CONFIGURE BGP
+    bigip_imish_config:
+      lines: "{{ lookup('template', 'tasks/j2/template_bgp_simpl.j2') }}"
+      replace: block
+      save_when: modified
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    loop_control:
+      label: "{{item.key}}"
+
+  - name: PRINT BGP CONFIG
+    debug:
+      msg: "{{ lookup('template', 'tasks/j2/template_bgp_simpl.j2') }}"

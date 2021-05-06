@@ -1,0 +1,85 @@
+---
+
+  - name: Get a managment network IP for bigip2
+    set_fact:
+      bigip2_mgmtIP: "{{ lookup('nios_next_ip', bigipSubnets.mgmtSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an management IPv4 host record for BIG-IP2
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_mgmtIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: Get a external network IP for bigip2
+    set_fact:
+      bigip2_extIP: "{{ lookup('nios_next_ip', bigipSubnets.externalSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an external IPv4 host record for BIG-IP1
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-ext-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_extIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: Get a external floatnetwork IP for bigip2
+    set_fact:
+      bigip2_extFloatIP: "{{ lookup('nios_next_ip', bigipSubnets.externalSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an external float IPv4 host record for BIG-IP1
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-extFloat-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_extFloatIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: Get a red network IP for bigip2
+    set_fact:
+      bigip2_redIP: "{{ lookup('nios_next_ip', bigipSubnets.redSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an red IPv4 host record for BIG-IP1
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-red-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_redIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: Get a red float network IP for bigip2
+    set_fact:
+      bigip2_redFloatIP: "{{ lookup('nios_next_ip', bigipSubnets.redSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an red Float IPv4 host record for BIG-IP1
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-redFloat-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_redFloatIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: Get a HA network IP for bigip2
+    set_fact:
+      bigip2_haIP: "{{ lookup('nios_next_ip', bigipSubnets.haSubnet, provider=nios_provider)[0] }}"
+
+  - name: Configure an HA IPv4 host record for BIG-IP1
+    nios_host_record:
+      name: "{{ bigip2_hostname }}-ha-{{ version }}.example1.com"
+      ipv4addrs:
+        - address: "{{ bigip2_haIP }}"
+      state: present
+      view: default
+      provider: "{{ nios_provider }}"
+
+  - name: set bigip2_ha_status
+    set_fact:
+      bigip2_ha_status: "False"
+        
+

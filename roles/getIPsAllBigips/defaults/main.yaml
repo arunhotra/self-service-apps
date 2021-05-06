@@ -1,0 +1,9 @@
+--- 
+bigipSubnets:
+  mgmtSubnet: 10.254.29.96/27
+  externalSubnet: 192.168.251.0/24 
+  redSubnet: 192.168.252.0/24 
+  haSubnet: 192.168.254.0/24 
+
+#as3uri: mgmt/shared/appsvcs/declare
+#taskuri: mgmt/shared/appsvcs/task

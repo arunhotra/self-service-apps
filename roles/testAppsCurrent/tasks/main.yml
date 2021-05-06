@@ -1,0 +1,23 @@
+- import_tasks: build_provider.yaml
+  tags:
+    - testAppsCurrent
+
+- import_tasks: populate_status.yaml
+  tags:
+    - testAppsCurrent
+
+# - import_tasks: cleanup_temp_directories.yaml
+#   tags:
+#     - testAppsCurrent
+
+# - import_tasks: clone_app_repo.yaml
+#   tags:
+#     - testAppsCurrent
+# - import_tasks: bigip_appIntentData_get.yaml
+#   tags:
+#     - testAppsCurrent
+
+- import_tasks: populate_pool_status_current.yaml
+  when: active_host == True
+  tags:
+    - testAppsCurrent

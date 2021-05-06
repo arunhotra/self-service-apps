@@ -1,0 +1,17 @@
+- import_tasks: build_provider.yaml
+  tags:
+    - updateAS3RPM
+
+- import_tasks: getIntentData.yaml
+  tags:
+    - updateAS3RPM
+
+- import_tasks: cleanIntentData.yaml
+  tags:
+    - updateAS3RPM
+
+- import_tasks: update_rpms.yaml
+  tags:
+    - updateAS3RPM
+
+

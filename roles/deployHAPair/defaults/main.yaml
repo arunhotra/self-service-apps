@@ -1,0 +1,6 @@
+---
+VRAtokenuri: identity/api/tokens
+# VRAuri: catalog-service/api/consumer/entitledCatalogItems/09bb2712-c8da-462b-ae45-1d96e9391302/requests?businessGroupId=c41fbd68-a0a0-4522-b520-03e2f51494f6&requestedFor=sov_admin@vsphere.local
+VRAtaskuri: catalog-service/api/consumer/requests
+# business_group_id: c41fbd68-a0a0-4522-b520-03e2f51494f6
+# requestedFor: sov_admin@vsphere.local

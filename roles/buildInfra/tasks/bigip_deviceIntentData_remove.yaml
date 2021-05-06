@@ -1,0 +1,13 @@
+---
+- name: Cleaning up temporary directories prior to getting intent data
+  file:
+    path: "{{ role_path }}/tmp"
+    state: absent
+  tags:
+    - buildInfra
+
+- name: Wait for a few seconds
+  wait_for:
+    timeout: 5
+  tags:
+    - buildInfra

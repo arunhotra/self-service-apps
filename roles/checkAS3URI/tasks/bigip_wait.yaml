@@ -1,0 +1,8 @@
+---
+- name: Wait a maximum of 60 seconds for BIG-IP to be ready to take configuration
+  bigip_wait:
+    delay: 10
+    timeout: 60
+    provider: "{{ provider }}"
+  tags:
+    - checkAS3URI

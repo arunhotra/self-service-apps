@@ -1,0 +1,14 @@
+---
+
+  - name: Check if the repos dir is empty 
+    find:
+      paths: "{{ role_path }}/tmp/repos/"
+      patterns: '*.*'
+      recurse: yes
+    register: foundFiles
+    
+  - name: Cleaning up temporary directories prior to getting intent data
+    file:
+      path: "{{ role_path }}/tmp/repos"
+      state: absent
+    when: foundFiles.matched > 0

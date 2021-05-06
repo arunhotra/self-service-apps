@@ -1,0 +1,9 @@
+---
+- name: Setup nios provider for IPAM
+  set_fact:
+    nios_provider:
+      host: "{{ipam_hostname}}"
+      username: "{{ipam_username}}"
+      password: "{{ipam_password}}"
+  tags:
+    - mapAppFqdns

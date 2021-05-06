@@ -1,0 +1,6 @@
+bak-legacy-stuff-ignore
+*.log
+.DS_Store
+collections
+roles/f5devcentral.atc_deploy
+*.json

@@ -1,0 +1,46 @@
+{
+	"base": {
+		"timestamp": {
+			"epoch":"{{ ansible_date_time.epoch }}"
+		},
+		"mgmt": {
+			"ip":"{{ VirtualMachine_Network0_Address }}",
+            "hostname": "{{ VirtualMachine_Network0_Hostname }}"
+		},
+		"haPeer": {
+			"primary": "{{ ha_status }}",
+			"haIp": "{{ ha_peer_ip }}"
+		},
+		"externalIp": {
+			"name": "externalIP",
+			"ip": "{{ VirtualMachine_Network2_Address }}",
+			"cidr": "/24",
+			"vlan": "external"
+		},
+		"externalFloatIp": {
+			"name": "externalFloatIP",
+			"ip": "{{ externalFloat }}",
+			"cidr": "/24",
+			"vlan": "external"
+		},
+		"internalRedIp": {
+			"name": "internalRedIP",
+			"ip": "{{ VirtualMachine_Network1_Address }}",
+			"cidr": "/24",
+			"vlan": "internalRed"
+		},
+		"internalRedFloatIp": {
+			"name": "internalRedFloatIP",
+			"ip": "{{ internalFloat }}",
+			"cidr": "/24",
+			"vlan": "internalRed"
+		},
+		"haIp": {
+			"name": "haIP",
+			"ip": "{{ VirtualMachine_Network3_Address }}",
+			"cidr": "/24",
+			"vlan": "ha"
+		},
+		"dataCenter": "virtualDataCenter"
+	}
+}

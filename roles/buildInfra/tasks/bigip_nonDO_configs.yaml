@@ -1,0 +1,106 @@
+---
+
+  - name: "BIG-IP Command on guests - pre-DO"
+    bigip_command:
+      commands:
+        - "modify cli preference prompt { host user status current-folder config-sync-status }"
+        - "modify cli global-settings service number"
+        - "run /util bash -c \"bigstart remove named\""
+        - "run /util bash -c \"bigstart remove zxfrd\""
+        - "run /util bash -c \"openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -subj '/C=US/ST=OH/L=Columbus/O=My Company/OU=Network Services/CN=`uname -n`' -keyout /config/httpd/conf/ssl.key/server.key -out /config/httpd/conf/ssl.crt/server.crt -sha256\""
+        - "modify sys global-settings gui-security-banner-text \"********** This system (including all hardware, software, and peripheral equipment) is private property. **********\""
+        - "modify sys global-settings gui-security-banner enabled"
+        #- "run /util bash -c \"cat /config/httpd/conf/ssl.crt/server.crt > /config/big3d/client.crt\""
+        #- "run /util bash -c \"cat /config/httpd/conf/ssl.crt/server.crt > /config/gtm/server.crt\""
+        - save sys config
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    delegate_to: localhost
+    loop_control:
+      label: "{{item.key}}"
+
+  - name: DELETE DEFAULT V2 COMMUNITY
+    bigip_snmp_community:
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+      access: ro
+      community: public
+      name: public
+      source: default
+      ip_version: "4"
+      version: v2c
+      state: absent
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    delegate_to: localhost
+    loop_control:
+      label: "{{item.key}}"
+
+  - name: Create udp_nms_relay_5000 monitor
+    bigip_monitor_udp:
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+      name: udp_nmsrelay_5000
+      send: H,1,1.1.1.199
+      state: present
+      ip: "*"
+      port: "5000"
+      interval: 15
+      timeout: 46
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    delegate_to: localhost
+    loop_control:
+      label: "{{item.key}}"
+
+  - name: CREATE AFM POOL
+    bigip_pool:
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+      name: "jpmc_hsl"
+      monitors: "/Common/udp_nmsrelay_5000"
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    delegate_to: localhost
+    loop_control:
+      label: "{{item.key}}"
+
+  - name: AFM POOL MEMBERS
+    bigip_pool_member:
+      provider:
+        server: "{{item.value.mgmtIp}}"
+        password: "{{bigip_password}}"
+        user: "{{bigip_username}}"
+        server_port: "{{bigip_port}}"
+        validate_certs: no
+      pool: "jpmc_hsl"
+      address: "10.254.254.1"
+      port: "514"
+    with_dict: "{{device_vars}}"
+    when: 
+      - '"bigip" in item.key'
+    delegate_to: localhost
+    loop_control:
+      label: "{{item.key}}"

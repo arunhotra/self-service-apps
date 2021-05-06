@@ -1,0 +1,39 @@
+- import_tasks: build_provider.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: cleanup_temp_directories.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_deviceIntentData_get.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_deviceIntentData_remove.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_wait.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_do_rpms.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_wait.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_as3_rpms.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_wait.yaml
+  tags:
+    - buildInfra
+
+- import_tasks: bigip_declarativeOnboarding.yaml
+  tags:
+    - buildInfra

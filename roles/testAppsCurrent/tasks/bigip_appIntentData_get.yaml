@@ -1,0 +1,54 @@
+---
+- name: load application vars from the cloned repository
+  include_vars:
+    files_matching: .yaml
+    dir: "{{role_path}}/tmp/app-inputs"
+    name: apps
+  tags:
+    - testAppsCurrent
+
+- name: Create Directory Structure for Site/Tenant
+  file:
+    path: "{{ role_path }}/tmp/appDeploy/{{item.value.app_locations.datacenter_name}}/{{item.value.tenant}}"
+    state: directory
+  with_dict: "{{apps}}"
+  loop_control:
+    label: "{{item}}"
+  tags:
+    - testAppsCurrent
+
+- name: Create App AS3 json blob file(s)
+  template:
+    src: "{{role_path}}/templates/{{item.value.app_template}}.j2"
+    dest: "{{role_path}}/tmp/appDeploy/{{item.value.app_locations.datacenter_name}}/{{item.value.tenant}}/{{item.value.app_name}}.json"
+    mode: "preserve"
+  with_dict: "{{ apps }}"
+  loop_control:
+    label: "{{item.key}}"
+  tags:
+    - testAppsCurrent
+
+- name: Create tmp Directory for Declarations
+  file:
+    path: "{{role_path}}/tmp/declarations"
+    state: directory
+  tags:
+    - testAppsCurrent
+
+- name: Group all Application Files
+  assemble:
+    remote_src: False
+    src: "{{role_path}}/tmp/appDeploy/{{item.value.app_locations.datacenter_name}}/{{item.value.tenant}}/"
+    dest: "{{role_path}}/tmp/declarations/{{item.value.app_locations.datacenter_name}}-{{item.value.tenant}}_combined.yaml"
+    delimiter: ","
+  with_dict: "{{apps}}"
+  loop_control:
+    label: "{{item}}"
+  tags:
+    - testAppsCurrent
+
+- name: Retrive AS3 files to push
+  command: "ls {{role_path}}/tmp/declarations/"
+  register: dir_out
+  tags:
+    - testAppsCurrent

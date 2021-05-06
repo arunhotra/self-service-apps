@@ -1,0 +1,5 @@
+    ipam_username: admin
+
+    #sensitive data
+
+    ipam_password: "{{ vault_ipam_password }}"

@@ -1,0 +1,61 @@
+---
+bigip_username: admin
+bigiq_pass: "{{ vault_bigiq_password }}"
+bigip_port: 443
+validate_certs: no
+
+ipam_hostname: ipam.example1.com
+ipam_username: admin
+ipam_password: "{{ vault_ipam_password }}"
+
+bigiq: 10.254.29.123
+bigiq_user: admin
+bigip_password: "{{ vault_bigip_password }}"
+lic_pool: F5-BIG-VE-BT-1G-V16-LIC
+
+tower_username: admin
+tower_password: "{{vault_tower_password }}"
+
+
+VRA_username: lsimon
+VRA_tenant: f5
+VRA_password: "{{ vault_VRA_password }}"
+
+catalog_map:
+  v15: "a41ac7f6-20be-47a7-ba9f-0591d78dc8e9"
+  v16: "46bf0a77-faa9-4465-bb56-c91937db3198"
+
+type_filter_map:
+  v15: "BIGIPHAPair"
+  v16: "BIGIPHAPair_v16"
+
+business_group_id: 7641c8bd-32d1-4e57-acd2-61a21ea759fa
+requestedFor: lsimon@vsphere.local
+
+
+
+#########################################################
+####  When using the SovLabs plugin use this section ####
+####   This is the vsphere.local tenant information  ####
+#########################################################
+
+# VRA_username: sov_admin
+# VRA_tenant: vsphere.local
+# VRA_password: "{{ vault_VRA_password }}"
+
+# catalog_map:
+#   v15: "09bb2712-c8da-462b-ae45-1d96e9391302"
+#   v16: "0e35cb82-bc35-49dd-a790-40b6d9561157"
+
+# type_filter_map:
+#   v15: "f5SovlabsHaPair"
+#   v16: "f5SovlabsHaPairv16"
+
+# business_group_id: c41fbd68-a0a0-4522-b520-03e2f51494f6
+# requestedFor: sov_admin@vsphere.local
+
+
+#############################################################
+####  When NOT using the SovLabs plugin use this section ####
+####    This is the f5 tenant information                ####
+#############################################################

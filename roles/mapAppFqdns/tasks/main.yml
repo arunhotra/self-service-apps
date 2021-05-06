@@ -1,0 +1,20 @@
+- import_tasks: cleanup_temp_directories.yaml
+  tags:
+    - mapAppFqdns
+
+- import_tasks: clone_app_repo.yaml
+  tags:
+    - mapAppFqdns
+- import_tasks: bigip_appIntentData_get.yaml
+  tags:
+    - mapAppFqdns
+
+- import_tasks: build_ipam_provider.yaml
+  # run_once: true
+  tags:
+    - mapAppFqdns
+
+- import_tasks: map_app_fqdns.yaml
+  # run_once: true
+  tags:
+    - mapAppFqdns

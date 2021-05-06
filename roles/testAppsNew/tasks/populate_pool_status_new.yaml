@@ -1,0 +1,41 @@
+- name: Initializing the pool statuses
+  vars:
+  set_fact:
+    pool_statuses_new: {}
+  tags:
+    - testAppsNew
+
+- name: COLLECT BIG-IP ltm Pools for "{{ inventory_hostname }}" using the FACTS module
+  bigip_device_info:
+    provider: "{{ provider }}"
+    gather_subset:
+      - ltm-pools
+  register: pools
+  tags:
+    - testAppsNew
+
+- name: Extracting the status of the pools
+  set_fact:
+    pool_statuses_new: "{{ pool_statuses_new|default({}) | combine({item.name:item.availability_status})}}"
+  loop: "{{ pools.ltm_pools }}"
+  tags:
+    - testAppsNew
+
+# - name: Copy output to file
+#   copy:
+#     content: "{{ pool_statuses }}"
+#     dest: "../tmp/new_status.json"
+#   tags:
+#     - testAppsNew
+
+- name: Share these variables across playbooks
+  set_stats:
+    data:
+      pool_statuses_new: "{{ pool_statuses_new }}"
+
+- name: Log the pool statuses in the logs
+  copy:
+    content: "{{pool_statuses_new}}"
+    dest: "/tmp/logs/statusLogs/{{group_names[0]}}_new_status.json"
+  tags:
+    - testAppsNew

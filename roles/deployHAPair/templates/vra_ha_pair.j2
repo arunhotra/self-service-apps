@@ -1,0 +1,32 @@
+{
+    "type": "com.vmware.vcac.catalog.domain.request.CatalogItemProvisioningRequest",
+    "catalogItemId": "{{ catalog_item_id }}",
+    "requestedFor": "sov_admin@vsphere.local",
+    "businessGroupId": "c41fbd68-a0a0-4522-b520-03e2f51494f6",
+    "description": null,
+    "reasons": null,
+    "data": {
+        "DataCenter": "virtualDataCenter",
+        "twrInvGroup": "{{bigip1_hostname}}_{{bigip2_hostname}}_{{ version }}",
+        "F5_appliance": {
+            "componentTypeId": "com.vmware.csp.component.cafe.composition",
+            "componentId": null,
+            "classId": "Blueprint.Component.Declaration",
+            "typeFilter": "{{type_filter}}*F5_appliance",
+            "data": {
+                "Hostname": "{{ bigip1_hostname }}-{{ version }}"
+            }
+        },
+        "F5_appliance2": {
+            "componentTypeId": "com.vmware.csp.component.cafe.composition",
+            "componentId": null,
+            "classId": "Blueprint.Component.Declaration",
+            "typeFilter": "{{type_filter}}*F5_appliance2",
+            "data": {
+                "Hostname": "{{ bigip2_hostname }}-{{ version }}"
+            }
+        },
+        "_leaseDays": null,
+        "_number_of_instances": 1
+    }
+}

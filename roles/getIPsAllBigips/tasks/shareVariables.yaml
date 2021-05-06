@@ -1,0 +1,30 @@
+---
+
+  - name: set bigip1_ha_peer
+    set_fact:
+      bigip1_ha_peer_ip: "{{ bigip2_haIP }}"
+      bigip2_ha_peer_ip: "{{ bigip1_haIP }}"
+
+
+  - name: Share these variables across playbooks
+    set_stats:
+      data:
+        bigip1_hostname: "{{ bigip1_hostname }}"
+        bigip1_mgmtIP: "{{ bigip1_mgmtIP }}"
+        bigip1_extIP: "{{ bigip1_extIP }}"
+        bigip1_extFloatIP: "{{ bigip1_extFloatIP }}"
+        bigip1_redIP: "{{ bigip1_redIP }}"
+        bigip1_redFloatIP: "{{ bigip1_redFloatIP }}"
+        bigip1_haIP: "{{ bigip1_haIP }}"
+        bigip1_ha_status:  "{{ bigip1_ha_status }}"
+        bigip1_ha_peer_ip: "{{ bigip1_ha_peer_ip }}"
+        bigip2_hostname: "{{ bigip2_hostname }}"
+        bigip2_mgmtIP: "{{ bigip2_mgmtIP }}"
+        bigip2_extIP: "{{ bigip2_extIP }}"
+        bigip2_extFloatIP: "{{ bigip2_extFloatIP }}"
+        bigip2_redIP: "{{ bigip2_redIP }}"
+        bigip2_redFloatIP: "{{ bigip2_redFloatIP }}"
+        bigip2_haIP: "{{ bigip2_haIP }}"
+        bigip2_ha_status: "{{ bigip2_ha_status }}"
+        bigip2_ha_peer_ip: "{{ bigip2_ha_peer_ip }}"
+        version: "{{ version }}"

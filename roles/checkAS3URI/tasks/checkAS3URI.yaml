@@ -1,0 +1,16 @@
+- name: REST Call to check for the status of AS3 Declaration
+  uri:
+    url: "https://{{inventory_hostname}}:{{bigip_port}}/{{ as3RpmCheckUri }}"
+    method: GET
+    return_content: yes
+    status_code: [200, 202]
+    url_username: "{{bigip_username}}"
+    url_password: "{{bigip_password}}"
+    force_basic_auth: yes
+    validate_certs: no
+  register: AS3_presence_check
+  until: AS3_presence_check.status == 200
+  retries: 5
+  delay: 5
+  tags:
+    - checkAS3URI

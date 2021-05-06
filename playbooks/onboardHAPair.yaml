@@ -1,0 +1,9 @@
+---
+- name: Spin BIG IP HA Pair using vra
+  hosts: vra
+  connection: local
+  gather_facts: no
+
+  roles:
+    - manage-secret
+    - deployHAPair

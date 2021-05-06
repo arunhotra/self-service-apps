@@ -1,0 +1,10 @@
+---
+- name: BIG IP Base onboarding
+  hosts: "{{bigip1_hostname}}_{{bigip2_hostname}}_{{ version }}"
+  # hosts: onboarded-ha-pair
+  connection: local
+  gather_facts: no
+
+  roles:
+    - manage-secret
+    - buildInfra

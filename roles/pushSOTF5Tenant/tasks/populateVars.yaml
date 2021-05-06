@@ -1,0 +1,43 @@
+
+
+
+  - name: cleanup and clone
+    block:
+      - name: Check if the repos dir is empty 
+        find:
+          paths: "{{ role_path }}/tmp/repos/"
+          patterns: '*.*'
+          recurse: yes
+        register: foundFiles
+        
+      - name: Cleaning up temporary directories prior to getting intent data
+        file:
+          path: "{{ role_path }}/tmp/repos"
+          state: absent
+        when: foundFiles.matched > 0
+      
+      # - name: Create the tmp directory
+      #   file:
+      #     path: "{{role_path}}/tmp/repos"
+      #     state: directory
+
+      - git:
+          repo: git@github.com:arunhotra/infra-repo.git
+          #repo: https://github.com/arunhotra/infra-repo.git
+          dest: "{{role_path}}/tmp/repos"
+          force: "yes"
+          accept_hostkey: true
+    run_once: true
+
+
+  - name: Poplulate files from template
+    template:
+      src: 'bigip.j2'
+      dest: "{{role_path}}/tmp/repos/virtualDataCenter/{{inventory_hostname_short}}.json"
+
+  - name: Upload the files to the repository
+    shell: git config --global user.name "arunganti" ; git config --global user.email "a.ganti@f5.com" ; git add . ; git commit -m "onboarded ha pair" ; git push origin master
+    args:
+      chdir: "{{role_path}}/tmp/repos/"
+    run_once: true
+

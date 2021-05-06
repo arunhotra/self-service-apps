@@ -1,0 +1,14 @@
+---
+  - name: Checking if any temporary files exist prior to cleanup
+    stat: path={{role_path}}/tmp
+    register: temp_directory
+    tags:
+      - buildInfra
+
+  - name: Cleaning up temporary directories prior to getting intent data
+    file:
+      path: "{{ role_path }}/tmp"
+      state: absent
+    when: temp_directory.stat.exists 
+    tags:
+      - buildInfra

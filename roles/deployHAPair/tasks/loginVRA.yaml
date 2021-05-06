@@ -1,0 +1,24 @@
+---
+  
+  - name: Login to VRA and get the Token
+    uri:
+      url: "https://{{inventory_hostname}}/{{VRAtokenuri}}"
+      method: POST
+      body: 
+        username: "{{VRA_username}}"
+        password: "{{VRA_password}}"
+        tenant: "{{VRA_tenant}}"
+      headers:
+        Content-Type: "application/json"
+      return_content: yes
+      body_format: json
+      status_code: 200
+      validate_certs: no
+    register: VRAAccess
+    tags:
+    - deployBIGIP
+
+
+  - name: Set the token
+    set_fact:
+      vra_token: "{{VRAAccess.json.id}}"

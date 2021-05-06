@@ -1,0 +1,28 @@
+---
+- name: Checking if any temporary files exist prior to cleanup
+  stat: path=../tmp
+  register: temp_directory
+  tags:
+    - prepUpgradeEnv
+
+- name: Cleaning up temporary directories prior to getting intent data
+  file:
+    path: "../tmp"
+    state: absent
+  when: temp_directory.stat.exists
+  tags:
+    - prepUpgradeEnv
+
+- name: Create Directory tmp for storing files to compare
+  file:
+    path: "../tmp"
+    state: directory
+  tags:
+    - prepUpgradeEnv
+
+- name: Pass the upgrade variable upstream to be used by the App workflow during the upgrade
+  set_stats:
+    data:
+      upgrade: "{{ upgrade }}"
+  tags:
+    - prepUpgradeEnv

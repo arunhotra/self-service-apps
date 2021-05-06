@@ -1,0 +1,12 @@
+---
+
+- name: Get IP addresses from IPAM, add hosts to Tower, push to repo
+  hosts: "{{bigip1_hostname}}_{{bigip2_hostname}}_{{ version }}"
+  connection: local
+  gather_facts: yes
+
+  
+  roles:
+    - manage-secret
+    - pushSOTF5Tenant
+

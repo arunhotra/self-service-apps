@@ -1,0 +1,10 @@
+
+- include_tasks: loginVRA.yaml
+  tags:
+    - deployBIGIP
+
+
+
+- include_tasks: initDeployment.yaml
+  tags:
+    - deployBIGIP

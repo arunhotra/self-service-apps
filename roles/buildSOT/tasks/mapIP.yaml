@@ -1,0 +1,25 @@
+---
+
+# - name: configure an IPv4 host record
+#   nios_host_record:
+#     name: "{{host_to_map}}"
+#     ipv4addrs:
+#       - address: "{{ip_to_map}}"
+#     state: present
+#     provider: "{{nios_provider}}"
+
+
+# - name: configure an IPv4 host record
+#   nios_host_record:
+#     name: leaf53.example1.com
+#     ipv4addrs:
+#       - ipv4addr: "{{ lookup('nios_next_ip', '192.168.254.0/24', provider=nios_provider)[0] }}"
+#     state: present
+#     provider: "{{nios_provider}}"
+
+- name: configure an IPv4 host record
+  nios_a_record:
+    name: leaf53.example1.com
+    ipv4addr: 192.168.254.22
+    state: present
+    provider: "{{nios_provider}}"

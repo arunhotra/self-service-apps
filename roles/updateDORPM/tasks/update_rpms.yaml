@@ -1,0 +1,8 @@
+---
+- name: "Upload and install DO rpms to bigips"
+  bigip_lx_package:
+    package: "{{ role_path }}/files/dorpms/{{device_vars.commonEnvValues.dorpm}}"
+    provider: "{{ provider }}"
+  register: DO_upload_result
+  tags:
+    - updateDORPM

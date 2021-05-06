@@ -1,0 +1,25 @@
+---
+
+- name: set MgmtIP for bigip1
+  set_fact:
+      bigip1_mgmtIP: "{{ lookup('dig', inventory_hostname)}}"
+  when: "'bigip1' in inventory_hostname"
+
+- name: Share these variables across playbooks
+  set_stats:
+    data:
+      bigip1_hostname: "{{ bigip1_hostname }}"
+      bigip1_mgmtIP: "{{ bigip1_mgmtIP }}"
+  when: "'bigip1' in inventory_hostname"
+
+- name: set MgmtIP for bigip2
+  set_fact:
+      bigip2_mgmtIP: "{{ lookup('dig', inventory_hostname)}}"
+  when: "'bigip2' in inventory_hostname"
+
+- name: Share these variables across playbooks
+  set_stats:
+    data:
+      bigip2_hostname: "{{ bigip2_hostname }}"
+      bigip2_mgmtIP: "{{ bigip2_mgmtIP }}"
+  when: "'bigip2' in inventory_hostname"

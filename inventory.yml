@@ -1,0 +1,18 @@
+all:
+  hosts:
+    mail.example.com:
+  children:
+    perimeterSecTier1:
+      hosts:
+        one.example.com:
+        two.example.com:
+        three.example.com:
+    perimeterSecTier2:
+      hosts:
+        four.example.com:
+        five.example.com:
+        six.example.com:
+    virtualDataCenter:
+      hosts:
+        dataCenter_bigipA:
+        dataCenter_bigipB:

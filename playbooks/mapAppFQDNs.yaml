@@ -1,0 +1,9 @@
+---
+- name: Build apps
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  roles:
+    - manage-secret
+    - mapAppFqdns

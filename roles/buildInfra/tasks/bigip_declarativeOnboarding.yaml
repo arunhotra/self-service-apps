@@ -1,0 +1,64 @@
+---
+- name: Print rendered DO declaration
+  debug:
+    msg: '{"DO_declaration": {{ lookup(''template'',''{{ role_path }}/templates/template_DO_declaration_BIG-IP-IQ.j2'') }}}'
+    verbosity: 3
+  tags:
+    - buildInfra
+
+- name: Log the DO delcaration into the logs
+  template:
+    src: "template_DO_declaration_BIG-IP-IQ.j2"
+    dest: "/tmp/logs/infraLogs/{{inventory_hostname}}_{{version}}.json"
+  tags:
+    - buildInfra
+
+- name: REST call DO declaration to BIG-IPs
+  uri:
+    url: "https://{{inventory_hostname}}:{{bigip_port}}/mgmt/shared/declarative-onboarding"
+    method: POST
+    body: "{{ lookup('template','{{ role_path }}/templates/template_DO_declaration_BIG-IP-IQ.j2') }}"
+    headers:
+      Content-Type: "application/json"
+    return_content: yes
+    body_format: json
+    status_code: 202
+    url_username: "{{bigip_username}}"
+    url_password: "{{bigip_password}}"
+    force_basic_auth: yes
+    validate_certs: no
+  register: DO_output
+  tags:
+    - buildInfra
+
+- name: Creating DO task variable for subsequent tasks
+  set_fact:
+    id: "{{DO_output.json.id}}"
+  tags:
+    - buildInfra
+
+- name: Delay checking BIG-IP for 150 seconds allowing DO declaration to process
+  bigip_wait:
+    timeout: 600
+    delay: 150
+    provider: "{{ provider }}"
+  tags:
+    - buildInfra
+
+- name: REST to check for Successfull DO Declaration to both BIG-IPs
+  uri:
+    url: "https://{{inventory_hostname}}:{{bigip_port}}/mgmt/shared/declarative-onboarding/task/{{id}}"
+    method: GET
+    return_content: yes
+    status_code: [200, 202]
+    url_username: "{{bigip_username}}"
+    url_password: "{{bigip_password}}"
+    force_basic_auth: yes
+    validate_certs: no
+  register: DO_task_check
+  ignore_unreachable: yes
+  until: DO_task_check.json.result.message.find("success") != -1
+  retries: 40
+  delay: 15
+  tags:
+    - buildInfra

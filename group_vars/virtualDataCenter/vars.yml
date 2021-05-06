@@ -1,0 +1,14 @@
+    bigip_username: admin
+    bigip_port: 443
+    validate_certs: no
+
+    #sensitive data
+
+    bigip_password: "{{ vault_bigip_password }}"
+
+
+    # IPAM info
+
+    ipam_hostname: ipam.example1.com
+    ipam_username: admin
+    ipam_password: "{{ vault_ipam_password }}"

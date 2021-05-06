@@ -1,0 +1,33 @@
+- name: Collect BIG-IP facts to determine HA pairs
+  bigip_device_info:
+    gather_subset:
+      - devices
+    provider: "{{ provider }}"
+  register: ha_pairs
+  tags:
+    - testAppsCurrent
+
+- name: Initialize active device fact
+  set_fact:
+    active_host: False
+  tags:
+    - testAppsCurrent
+
+- name: Set active host variable
+  set_fact:
+    active_host: True
+  when:
+    - inventory_hostname == "{{ device.hostname }}"
+    - device.failover_state == "active"
+  loop: "{{ ha_pairs.devices }}"
+  loop_control:
+    loop_var: device
+  tags:
+    - testAppsCurrent
+
+- name: debug active host fact
+  debug:
+    var: active_host
+    verbosity: 3
+  tags:
+    - testAppsCurrent

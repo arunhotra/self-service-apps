@@ -1,0 +1,8 @@
+---
+- name: "Upload and install AS3 rpms to bigips"
+  bigip_lx_package:
+    package: "{{ role_path }}/files/as3rpms/{{device_vars.commonEnvValues.as3rpm}}"
+    provider: "{{ provider }}"
+  register: AS3_upload_result
+  tags:
+    - updateAS3RPM

@@ -1,0 +1,29 @@
+---
+
+- name: Fill out template and populate bigip1 JSON for posting to Ansible Tower
+  template:
+    src: "createGroup.j2"
+    dest: "{{ role_path}}/files/createGroup.json"
+
+- name: REST call to tower to add new group
+  uri:
+    url: "https://tower.jpmclab.local/api/v2/groups/"
+    method: POST
+    body: "{{ lookup('file','{{ role_path }}/files/createGroup.json') }}"
+    headers:
+      Content-Type: "application/json"
+    return_content: yes
+    user: "{{ tower_username }}"
+    password: "{{ tower_password }}"
+    body_format: json
+    status_code: [201]
+    validate_certs: no
+    force_basic_auth: yes
+  register: group_output
+
+
+- name: getting ID of newly created group
+  set_fact:
+    group_id: "{{group_output.json.id}}"
+
+      

@@ -1,0 +1,6 @@
+- name: Initialize variables used for testing
+  vars:
+  set_fact:
+    test_success: false
+  tags:
+    - compareAppStatus

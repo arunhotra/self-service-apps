@@ -1,0 +1,4 @@
+    VRA_username: sov_admin
+    VRA_password: "{{ vault_VRA_password }}"
+    VRA_tenant: vsphere.local
+    

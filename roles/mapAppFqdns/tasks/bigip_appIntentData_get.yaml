@@ -1,0 +1,8 @@
+---
+- name: load application variables from the cloned repository
+  include_vars:
+    files_matching: .yaml
+    dir: "{{role_path}}/tmp/app-inputs"
+    name: apps
+  tags:
+    - mapAppFqdns

@@ -1,0 +1,31 @@
+"{{item.value.app_name}}": {
+    "class": "Application",
+    "template": "http",
+    "serviceMain": {
+        "class": "Service_HTTP",
+        {% if upgrade == false %}
+        "virtualAddresses": [
+            "{{item.value.app_locations.prod_vip_address}}"
+        ],
+        {% else %}
+        "virtualAddresses": [
+            "{{item.value.app_locations.alternate_vip_address}}"
+        ],
+        {% endif %}
+        "pool": "{{item.value.app_name}}_pool"
+    },
+    "{{item.value.app_name}}_pool": {
+        "class": "Pool",
+        "monitors": [
+            "http"
+        ],
+        "members": [
+            {
+                "servicePort": {{item.value.server_port}},
+                "serverAddresses": [
+                    "{{ item.value.app_locations.pool_members| join('", "') }}"
+                ]
+            }
+        ]
+    }
+}

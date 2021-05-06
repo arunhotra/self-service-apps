@@ -1,0 +1,8 @@
+
+---
+
+- include_tasks: populateVars.yaml
+  tags:
+    - buildSOT
+
+

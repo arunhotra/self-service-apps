@@ -1,0 +1,55 @@
+---
+
+
+- name: Fill out template and populate bigip1 JSON for posting to Ansible Tower
+  template:
+    src: "bigip1TowerHost.j2"
+    dest: "{{ role_path}}/files/bigip1TowerHost.json"
+
+- name: debug bigip1 template rendered
+  debug:
+    msg: "{{ lookup('file','{{ role_path }}/files/bigip1TowerHost.json') }}"
+    verbosity: 3
+
+- name: REST call to tower to add bigip1 as a host
+  uri:
+    url: "https://tower.jpmclab.local/api/v2/groups/{{ group_id }}/hosts/"
+    method: POST
+    body: "{{ lookup('file','{{ role_path }}/files/bigip1TowerHost.json') }}"
+    headers:
+      Content-Type: "application/json"
+    #return_content: yes
+    user: "{{ tower_username }}"
+    password: "{{ tower_password }}"
+    body_format: json
+    status_code: [201]
+    validate_certs: no
+    force_basic_auth: yes
+  #register: host_output
+
+- name: Fill out template and populate bigip2 JSON for posting to Ansible Tower
+  template:
+    src: "bigip2TowerHost.j2"
+    dest: "{{ role_path}}/files/bigip2TowerHost.json"
+
+- name: debug bigip2 template rendered
+  debug:
+    msg: "{{ lookup('file','{{ role_path }}/files/bigip2TowerHost.json') }}"
+    verbosity: 3
+
+- name: REST call to tower to add bigip2 as a host
+  uri:
+    url: "https://tower.jpmclab.local/api/v2/groups/{{ group_id }}/hosts/"
+    method: POST
+    body: "{{ lookup('file','{{ role_path }}/files/bigip2TowerHost.json') }}"
+    headers:
+      Content-Type: "application/json"
+    #return_content: yes
+    user: "{{ tower_username }}"
+    password: "{{ tower_password }}"
+    body_format: json
+    status_code: [201]
+    validate_certs: no
+    force_basic_auth: yes
+  #register: host_output
+

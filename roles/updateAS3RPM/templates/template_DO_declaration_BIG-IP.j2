@@ -1,0 +1,268 @@
+{
+    "schemaVersion": "1.15.0",
+    "class": "Device",
+    "async": true,
+    "label": "{{inventory_hostname}} guest build",
+    "Common": {
+        "class": "Tenant",
+        "mySystem": {
+            "class": "System",
+            "hostname": "{{inventory_hostname}}",
+            "cliInactivityTimeout": 900,
+            "consoleInactivityTimeout": 15,
+            "autoPhonehome": false,
+            "autoCheck": false
+
+        },
+        "myProvisioning": {
+            "class": "Provision",
+            "{{device_vars.commonEnvValues.modules.mod1.module}}": "{{device_vars.commonEnvValues.modules.mod1.level}}",
+            "{{device_vars.commonEnvValues.modules.mod3.module}}": "{{device_vars.commonEnvValues.modules.mod3.level}}"
+        },
+        "myDns": {
+            "class": "DNS",
+            "nameServers": [
+                {% for ip in device_vars.commonEnvValues.dns.hosts %}
+                "{{ip}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        },
+        "myNtp": {
+            "class": "NTP",
+            "servers": [
+                {% for ip in device_vars.commonEnvValues.ntp.hosts %}
+                "{{ip}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ],
+            "timezone": "{{device_vars.commonEnvValues.ntp.timezone}}"
+        },
+        "{{device_vars.base.externalIp.vlan}}": {
+            "class": "VLAN",
+            "interfaces": [
+                {
+                    "name": "1.1"
+                }
+            ]
+        },
+        "{{device_vars.base.internalRedIp.vlan}}": {
+            "class": "VLAN",
+            "interfaces": [
+                {
+                    "name": "1.2"
+                }
+            ]
+        },
+
+        "{{device_vars.base.haIp.vlan}}": {
+            "class": "VLAN",
+            "interfaces": [
+                {
+                    "name": "1.3"
+                }
+            ]
+        },
+        "{{device_vars.base.externalIp.name}}": {
+            "class": "SelfIp",
+            "address": "{{device_vars.base.externalIp.ip}}{{device_vars.base.externalIp.cidr}}",
+            "allowService": [
+                "tcp:161",
+                "udp:161",
+                "tcp:22",
+                "tcp:4353",
+                "udp:4353",
+                "udp:1026",
+                "tcp:443",
+                "tcp:179"
+                ],
+            "vlan": "{{device_vars.base.externalIp.vlan}}"
+        },
+        "{{device_vars.base.internalRedIp.name}}": {
+            "class": "SelfIp",
+            "address": "{{device_vars.base.internalRedIp.ip}}{{device_vars.base.internalRedIp.cidr}}",
+            "allowService": [
+                "tcp:161",
+                "udp:161",
+                "tcp:22",
+                "tcp:4353",
+                "udp:4353",
+                "udp:1026",
+                "tcp:443",
+                "tcp:179"
+                ],
+            "vlan": "{{device_vars.base.internalRedIp.vlan}}"
+        },
+
+      
+        "{{device_vars.base.haIp.name}}": {
+            "class": "SelfIp",
+            "address": "{{device_vars.base.haIp.ip}}{{device_vars.base.haIp.cidr}}",
+            "allowService": "default",
+            "vlan": "{{device_vars.base.haIp.vlan}}"
+        },
+        "routeDomain0": {
+            "class": "RouteDomain",
+            "id": 0,
+            "routingProtocols": ["BGP"]
+        },
+        "myTacacs": {
+            "class": "Authentication",
+            "enabledSourceType": "{{device_vars.commonEnvValues.tacacs.sourceType}}",
+            "tacacs": {
+                "authentication": "{{device_vars.commonEnvValues.tacacs.authentication}}",
+                "protocol": "{{device_vars.commonEnvValues.tacacs.protocol}}",
+                "secret": "{{device_vars.commonEnvValues.tacacs.secret}}",
+                "servers": [
+                    {% for ip in device_vars.commonEnvValues.tacacs.servers %}
+                    "{{ip}}"{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                "service": "{{device_vars.commonEnvValues.tacacs.service}}"
+            }
+        },
+        "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.name}}": {
+            "class": "RemoteAuthRole",
+            "attribute": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.attribute}}",
+            "console": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.console}}",
+            "lineOrder": {{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.lineOrder}},
+            "role": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.role}}",
+            "remoteAccess": {{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.remoteAccess}},
+            "userPartition": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RW.userPartition}}"
+        },
+        "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.name}}": {
+            "class": "RemoteAuthRole",
+            "attribute": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.attribute}}",
+            "console": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.console}}",
+            "lineOrder": {{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.lineOrder}},
+            "role": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.role}}",
+            "remoteAccess": {{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.remoteAccess}},
+            "userPartition": "{{device_vars.commonEnvValues.tacacs.authRemoteRole.RO.userPartition}}"
+        },
+        "mySnmpAgent": {
+            "class": "SnmpAgent",
+            "contact": "{{device_vars.commonEnvValues.snmp.sysContact}}",
+            "location": "{{device_vars.commonEnvValues.snmp.sysLocation}}",
+            "allowList": [
+                {% for ip in device_vars.commonEnvValues.snmp.allowedAddresses %}
+                    "{{ip}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        },
+        "{{device_vars.commonEnvValues.snmp.communities.community_1.communityName}}": {
+            "class": "SnmpCommunity",
+            "source": "{{device_vars.commonEnvValues.snmp.communities.community_1.source}}",
+            "access": "{{device_vars.commonEnvValues.snmp.communities.community_1.access}}"
+        },
+        "{{device_vars.commonEnvValues.snmp.communities.community_2.communityName}}": {
+            "class": "SnmpCommunity",
+            "source": "{{device_vars.commonEnvValues.snmp.communities.community_2.source}}",
+            "access": "{{device_vars.commonEnvValues.snmp.communities.community_2.access}}"
+        },
+        "{{device_vars.commonEnvValues.snmp.traps.trap1.community}}": {
+            "class": "SnmpTrapDestination",
+            "community": "{{device_vars.commonEnvValues.snmp.traps.trap1.community}}",
+            "destination": "{{device_vars.commonEnvValues.snmp.traps.trap1.host}}",
+            "version": "{{device_vars.commonEnvValues.snmp.traps.trap1.version}}",
+            "port": {{device_vars.commonEnvValues.snmp.traps.trap1.port}},
+            "network": "{{device_vars.commonEnvValues.snmp.traps.trap1.network}}"
+        },
+        "{{device_vars.commonEnvValues.snmp.traps.trap2.community}}": {
+            "class": "SnmpTrapDestination",
+            "community": "{{device_vars.commonEnvValues.snmp.traps.trap2.community}}",
+            "destination": "{{device_vars.commonEnvValues.snmp.traps.trap2.host}}",
+            "version": "{{device_vars.commonEnvValues.snmp.traps.trap2.version}}",
+            "port": {{device_vars.commonEnvValues.snmp.traps.trap2.port}},
+            "network": "{{device_vars.commonEnvValues.snmp.traps.trap2.network}}"
+        },
+        "myTrapEvents": {
+            "class": "SnmpTrapEvents",
+            "agentStartStop": {{device_vars.commonEnvValues.snmp.agentTrap}},
+            "device": {{device_vars.commonEnvValues.snmp.bigipTraps}}
+        },
+        "sshSettings": {
+            "class": "SSHD",
+            "banner": "{{device_vars.commonEnvValues.sshd.sshdBanner.text}}",
+            "inactivityTimeout": {{device_vars.commonEnvValues.sshd.inactivityTimeout}},
+            "allow": [
+                {% for ip in device_vars.commonEnvValues.sshd.sshdAccess %}
+                    "{{ip}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        },
+        "{{device_vars.commonEnvValues.syslog.syslog1.name}}": {
+            "class": "SyslogRemoteServer",
+            "host": "{{device_vars.commonEnvValues.syslog.syslog1.host}}"
+        },
+        "{{device_vars.commonEnvValues.syslog.syslog2.name}}": {
+            "class": "SyslogRemoteServer",
+            "host": "{{device_vars.commonEnvValues.syslog.syslog2.host}}"
+        },
+        "httpdSettings": {
+            "class": "HTTPD",
+            "allow": [
+                {% for ip in device_vars.commonEnvValues.httpd.httpdAccess %}
+                    "{{ip}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ],
+            "sslCiphersuite": [ 
+                {% for cipher in device_vars.commonEnvValues.httpd.ciphers %}
+                    "{{cipher}}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ],
+            "sslProtocol": "{{device_vars.commonEnvValues.httpd.protocol}}"
+        },
+        "mydbvars": {
+            "class": "DbVariables",
+            "{{device_vars.commonEnvValues.dbVariables.var1.name}}": "{{device_vars.commonEnvValues.dbVariables.var1.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var2.name}}": "{{device_vars.commonEnvValues.dbVariables.var2.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var3.name}}": "{{device_vars.commonEnvValues.dbVariables.var3.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var4.name}}": "{{device_vars.commonEnvValues.dbVariables.var4.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var5.name}}": "{{device_vars.commonEnvValues.dbVariables.var5.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var6.name}}": "{{device_vars.commonEnvValues.dbVariables.var6.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var7.name}}": "{{device_vars.commonEnvValues.dbVariables.var7.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var8.name}}": "{{device_vars.commonEnvValues.dbVariables.var8.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var9.name}}": "{{device_vars.commonEnvValues.dbVariables.var9.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var10.name}}": "{{device_vars.commonEnvValues.dbVariables.var10.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var11.name}}": "{{device_vars.commonEnvValues.dbVariables.var11.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var12.name}}": "{{device_vars.commonEnvValues.dbVariables.var12.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var13.name}}": "{{device_vars.commonEnvValues.dbVariables.var13.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var14.name}}": "{{device_vars.commonEnvValues.dbVariables.var14.value}}",
+            "{{device_vars.commonEnvValues.dbVariables.var15.name}}": "{{device_vars.commonEnvValues.dbVariables.var15.value}}"
+        },
+        "configSync": {
+            "class": "ConfigSync",
+            "configsyncIp": "/Common/{{device_vars.base.haIp.name}}/address"
+        },
+        "failoverAddress": {
+            "class": "FailoverUnicast",
+            "address": "/Common/{{device_vars.base.haIp.name}}/address"
+        },
+        "failoverGroup": {
+            "class": "DeviceGroup",
+            "type": "sync-failover",
+            "members": [
+                {% if device_vars.base.haPeer.primary == "True"  %}
+                "{{device_vars.base.haIp.ip}}",
+                "{{device_vars.base.haPeer.haIp}}"
+                {% else %}
+                "{{device_vars.base.haPeer.haIp}}",
+                "{{device_vars.base.haIp.ip}}"
+                {% endif %}
+            ],
+            "owner": "/Common/failoverGroup/members/0",
+            "autoSync": true,
+            "saveOnAutoSync": false,
+            "networkFailover": true,
+            "fullLoadOnSync": false,
+            "asmSync": false
+        },
+        "myDeviceTrust": {
+            "class": "DeviceTrust",
+            "localPassword": "{{bigip_password}}",
+            "localUsername": "{{bigip_username}}",
+            "remoteHost": "/Common/failoverGroup/members/0",
+            "remotePassword": "{{bigip_password}}",
+            "remoteUsername":"{{bigip_username}}"
+        }
+
+    }
+}

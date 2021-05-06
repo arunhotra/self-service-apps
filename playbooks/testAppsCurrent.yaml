@@ -1,0 +1,9 @@
+---
+- name: Build apps
+  hosts: "{{bigip1_hostname}}_{{bigip2_hostname}}_{{ current_version }}"
+  connection: local
+  gather_facts: no
+
+  roles:
+    - manage-secret
+    - testAppsCurrent

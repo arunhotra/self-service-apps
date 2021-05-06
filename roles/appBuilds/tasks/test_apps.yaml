@@ -1,0 +1,9 @@
+- name: Test Applications and mark success or failure based on the test results
+  uri:
+    url: "http://{{item.value.app_locations.alternate_vip_address}}/"
+    validate_certs: no
+  register: status
+
+- name: Create status of each app and write it to file
+  set_fact:
+    app_statuses: "{{ app_statuses|default({}) | combine({item.key: status.status}) }}"

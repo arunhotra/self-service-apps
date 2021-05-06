@@ -1,0 +1,29 @@
+---
+- name: Create temporary directories for storing variables
+  file:
+    path: "{{ role_path }}/tmp/{{ group_names[0] }}/{{ inventory_hostname_short }}"
+    state: directory
+  tags:
+    - buildInfra
+
+- name: Download environment details from the infrastructure repository
+  get_url:
+    url: "https://raw.githubusercontent.com/arunhotra/infra-repo/master/virtualDataCenter/envDefaultBuildvalues.json"
+    dest: "{{ role_path }}/tmp/{{ group_names[0] }}/{{ inventory_hostname_short }}/common_deviceVars.json"
+  tags:
+    - buildInfra
+
+- name: Download device specific data from the infrastructure repository
+  get_url:
+    url: "https://raw.githubusercontent.com/arunhotra/infra-repo/master/virtualDataCenter/{{ inventory_hostname_short }}.json"
+    dest: "{{ role_path }}/tmp/{{ group_names[0] }}/{{ inventory_hostname_short }}/base_deviceVars.json"
+  tags:
+    - buildInfra
+
+- name: Populating the variables obtained from the infrastructure repository into memory
+  include_vars:
+    name: "device_vars"
+    dir: "{{ role_path }}/tmp/{{ group_names[0] }}/{{ inventory_hostname_short }}/"
+    files_matching: _deviceVars.json
+  tags:
+    - buildInfra
