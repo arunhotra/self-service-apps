@@ -1,0 +1,7 @@
+- debug:
+    msg: "{{app_statuses}}"
+
+- name: Copy output to file
+  copy:
+    content: "{{ app_statuses }}"
+    dest: "{{ role_path }}/tmp/{{ inventory_hostname }}_apps_status.json"

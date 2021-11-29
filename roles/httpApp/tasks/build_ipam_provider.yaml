@@ -1,0 +1,7 @@
+---
+- name: Setup nios provider
+  set_fact:
+    nios_provider:
+      host: "{{ipam_hostname}}"
+      username: "{{ipam_username}}"
+      password: "{{ipam_password}}"

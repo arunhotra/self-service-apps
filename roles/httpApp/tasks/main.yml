@@ -1,0 +1,43 @@
+- import_tasks: build_provider.yaml
+  tags:
+    - buildApp
+
+# - import_tasks: populate_status.yaml
+#   tags:
+#     - buildApp
+
+- import_tasks: cleanup_temp_directories.yaml
+  tags:
+    - buildApp
+
+- import_tasks: clone_app_repo.yaml
+  tags:
+    - buildApp
+
+# - import_tasks: bigip_appIntentData_get.yaml
+#   tags:
+#     - buildApp
+
+- import_tasks: bigip_appData_get.yaml
+  tags:
+    - buildApp
+
+
+- import_tasks: bigip_wait.yaml
+  tags:
+    - buildApp
+
+
+# - include_tasks: bigip_as3Onboarding.yaml
+#   with_items:
+#     - "{{dir_out.stdout_lines}}"
+#   loop_control:
+#     loop_var: outer_item
+#   when: active_host == True
+#   tags:
+#     - buildApp
+
+
+- include_tasks: bigip_httpAppOnboarding.yaml
+  tags:
+    - buildApp

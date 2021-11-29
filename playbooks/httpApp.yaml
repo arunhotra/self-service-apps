@@ -1,0 +1,11 @@
+---
+- name: Build apps
+  hosts: "{{bigip1_hostname}}"
+  # hosts: onboarded-ha-pair
+  connection: local
+  gather_facts: yes
+
+  roles:
+    - manage-secret
+    - httpApp
+    

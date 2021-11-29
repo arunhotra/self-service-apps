@@ -1,0 +1,8 @@
+---
+- name: Wait a maximum of 300 seconds for BIG-IP to be ready to take configuration
+  bigip_wait:
+    delay: 10
+    timeout: 300
+    provider: "{{ provider }}"
+  tags:
+    - buildApp

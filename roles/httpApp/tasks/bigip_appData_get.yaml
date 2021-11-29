@@ -1,0 +1,33 @@
+---
+- name: load vars from files downloaded from the App repository
+  include_vars:
+    files_matching: {{app}}.yaml
+    dir: "{{role_path}}/tmp/app-inputs"
+  tags:
+    - buildApp
+
+
+
+- name: Create tmp Directory for Declarations
+  file:
+    path: "{{role_path}}/tmp/declarations"
+    state: directory
+  tags:
+    - buildApp
+
+- name: Group all Application Files
+  assemble:
+    remote_src: False
+    src: "{{role_path}}/tmp/appDeploy/{{item.value.app_locations.datacenter_name}}/{{item.value.tenant}}/"
+    dest: "{{role_path}}/tmp/declarations/{{item.value.app_locations.datacenter_name}}-{{item.value.tenant}}_combined.yaml"
+    delimiter: ","
+  loop_control:
+    label: "{{item}}"
+  tags:
+    - buildApp
+
+- name: Retrive AS3 files to push
+  command: "ls {{role_path}}/tmp/declarations/"
+  register: dir_out
+  tags:
+    - buildApp

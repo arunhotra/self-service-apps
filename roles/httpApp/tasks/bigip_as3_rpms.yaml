@@ -1,0 +1,13 @@
+---
+
+- name: "Upload and install AS3 rpms to bigips"
+  bigip_lx_package:
+    package: "{{ role_path }}/files/as3rpms/{{ as3_current_rpm }}"
+    provider: "{{ provider }}"
+  register: AS3_upload_result
+
+- name: "Upload and install FAST rpms to bigips"
+  bigip_lx_package:
+    package: "{{ role_path }}/files/as3rpms/{{ fast_current_rpm }}"
+    provider: "{{ provider }}"
+  register: FAST_upload_result
